@@ -1,0 +1,23 @@
+###
+POST http://localhost:5000/auth/register
+Content-Type: application/json
+
+{
+    "firstName": "admin",
+    "lastName": "dua",
+    "email": "admindua@asd.asd",
+    "password": "1234",
+    "location": "jakarta"
+}
+
+###
+POST http://localhost:5000/auth/login
+Content-Type: application/json
+
+{
+    "email": "admindua@asd.asd",
+    "password": "1234"
+}
+
+###
+GET http://localhost:5000/auth/
