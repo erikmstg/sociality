@@ -11,7 +11,8 @@ const Navbar = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const user = useSelector(state => state.user)
-  const isDesktopScreen = useMediaQuery("(min-width: 1000px)")
+  const isDesktopScreen = useMediaQuery("(min-width: 886px)")
+  const isMobileScreen = useMediaQuery("(min-width: 600px)")
 
   const theme = useTheme()
   const neutralLight = theme.palette.neutral.light
@@ -20,8 +21,8 @@ const Navbar = () => {
   const primaryLight = theme.palette.primary.light
   const alt = theme.palette.background.alt
 
-  const fullName = "test user"
-  // const fullName = `${user.firstName} ${user.lastName}`
+  // const fullName = "test user"
+  const fullName = `${user.firstName} ${user.lastName}`
 
   return (
     <FlexBetween padding="1rem 6%" backgroundColor={alt}>
@@ -41,12 +42,14 @@ const Navbar = () => {
         >
           Sciality
         </Typography>
-        {isDesktopScreen && (
+
+        {isMobileScreen && (
           <FlexBetween
             backgroundColor={neutralLight}
             borderRadius="9px"
             gap="3rem"
             padding="0.1rem 1.5rem"
+            width={isMobileMenuToggled ? "240px" : "auto"}
           >
             <InputBase placeholder="Search.." />
             <IconButton >
@@ -58,7 +61,7 @@ const Navbar = () => {
 
       {/* Desktop nav */}
       {isDesktopScreen ? (
-        <FlexBetween gap="2rem">
+        <FlexBetween gap="1.5rem">
           {/* button to change state light and dark mode */}
           <IconButton onClick={() => dispatch(setMode())}>
             {theme.palette.mode === "dark" ? (
@@ -109,12 +112,11 @@ const Navbar = () => {
           bottom="0"
           height="100%"
           zIndex="10"
-          maxWidth="500px"
-          minWidth="300px"
+          minWidth="180px"
           backgroundColor={background}
         >
           {/* Close icon*/}
-          <Box display="flex" justifyContent="flex-end" p="1rem">
+          <Box display="flex" justifyContent="flex-end" p="1.5rem" pr="42px">
             <IconButton onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}>
               <Close />
             </IconButton>
