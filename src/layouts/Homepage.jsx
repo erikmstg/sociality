@@ -2,7 +2,8 @@ import { Box, useMediaQuery } from "@mui/material"
 import Navbar from "./navbar"
 import { useSelector } from "react-redux"
 import UserWidget from "./widgets/UserWidget"
-import PostWidget from "./widgets/PostWidget"
+import MyPostWidget from "./widgets/MyPostWidget"
+import PostsTimeline from "./widgets/PostsTimeline"
 
 const Homepage = () => {
   const { _id, picturePath } = useSelector(state => state.user)
@@ -25,7 +26,8 @@ const Homepage = () => {
           flexBasis={isDesktopScreen ? "42%" : undefined}
           mt={isDesktopScreen ? undefined : "2rem"}
         >
-          <PostWidget picturePath={picturePath} />
+          <MyPostWidget picturePath={picturePath} />
+          <PostsTimeline userId={_id} />
         </Box>
         {isDesktopScreen && (
           <Box flexBasis="26%"></Box>

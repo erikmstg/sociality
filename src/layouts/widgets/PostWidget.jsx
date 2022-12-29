@@ -1,159 +1,110 @@
-import { EditOutlined, DeleteOutline, AttachFileOutlined, GifBoxOutlined, ImageOutlined, MicOutlined, MoreHorizOutlined } from "@mui/icons-material"
-import { Box, Divider, Typography, useTheme, useMediaQuery, Button, IconButton, InputBase } from "@mui/material"
-import DropZone from "react-dropzone"
+import { ChatBubbleOutlineOutlined, FavoriteBorderOutlined, FavoriteOutlined, ShareOutlined } from "@mui/icons-material"
+import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material"
 import FlexBetween from "../../components/FlexBetween"
-import UserImage from "../../components/UserImage"
+import Friend from "../../components/Friend"
 import WidgetWrapper from "../../components/WidgetWrapper"
-import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { setPosts } from "../../state"
+import { setPost } from "../../state"
+import { useState } from "react"
 
-const PostWidget = ({ picturePath }) => {
+const PostWidget = ({
+    postId,
+    postUserId,
+    name,
+    description,
+    location,
+    picturePath,
+    userPicturePath,
+    likes,
+    comments, }) => {
+    const [isComments, setIsComments] = useState(false)
     const dispatch = useDispatch()
-    const [isImage, setIsImage] = useState(false)
-    const [image, setImage] = useState(null)
-    const [post, setPost] = useState("")
-    const { _id } = useSelector(state => state.user)
     const token = useSelector(state => state.token)
+    const loggedInUserId = useSelector(state => state.user._id)
+    const isLiked = Boolean(likes[loggedInUserId])
+    const likeCount = Object.keys(likes).length // this grab the number of likes
+
     const { palette } = useTheme()
-    const isDesktopScreen = useMediaQuery("(min-width: 1000px)")
-    const mediumMain = palette.neutral.maediumMain
-    const medium = palette.neutral.medium
+    const primary = palette.primary.main
+    const main = palette.neutral.main
 
-    const handlePost = async () => {
-        const formData = new FormData()
-        formData.append("userId", _id)
-        formData.append("description", post)
-        if (image) {
-            formData.append("picture", image)
-            formData.append("picturePath", image.name)
-        }
-
-        const request = await fetch(`http://localhost:5000/posts`, {
-            method: "POST",
-            headers: { Authorization: `Bearer ${token}` },
-            body: formData
+    // change the number of likes
+    const patchLike = async () => {
+        const response = await fetch(`http://localhost:5000/posts/${postId}/like`, {
+            method: "PATCH",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ userId: loggedInUserId })
         })
-
-        const posts = request.json()
-        dispatch(setPosts({ posts }))
-        setImage(null)
-        setPost("")
+        const updatedPost = await response.json()
+        dispatch(setPost({ post: updatedPost }))
     }
 
     return (
         <WidgetWrapper>
-            <FlexBetween gap="1.5rem">
-                <UserImage image={picturePath} />
-                <InputBase
-                    placeholder="Text something..."
-                    onChange={(e) => setPost(e.target.value)}
-                    value={post}
-                    sx={{
-                        width: "100%",
-                        backgroundColor: palette.neutral.light,
-                        borderRadius: "2rem",
-                        padding: "1rem 2rem"
-                    }}
+            <Friend
+                friendId={postUserId}
+                name={name}
+                subtitle={location}
+                userPicturePath={userPicturePath}
+            />
+            <Typography
+                color={main}
+                sx={{ mt: "1rem" }}
+            >
+                {description}
+            </Typography>
+            {picturePath && (
+                <img
+                    src={`http://localhost:5000/assets/${picturePath}`}
+                    alt="post"
+                    width="100%"
+                    height="auto"
+                    style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
                 />
-            </FlexBetween>
-            {isImage && (
-                <Box
-                    border={`1px solid ${medium}`}
-                    borderRadius="5px"
-                    mt="1rem"
-                    p="1rem"
-                >
-                    <DropZone
-                        acceptedFiles=".jpg, .jpeg, .png, .jfif"
-                        multiple={false}
-                        onDrop={(acceptedFiles) => setImage(acceptedFiles[0])}
-                    >
-                        {({ getRootProps, getInputProps }) => (
-                            <FlexBetween>
-                                <Box
-                                    {...getRootProps()}
-                                    border={`2px dashed ${palette.primary.main}`}
-                                    p="1rem"
-                                    width="100%"
-                                    sx={{ "&:hover": { cursor: "pointer" } }}
-                                >
-                                    <input {...getInputProps()} />
-                                    {!image ? (
-                                        <p>Add image here</p>
-                                    ) : (
-                                        <FlexBetween>
-                                            <Typography>{image.name}</Typography>
-                                            <EditOutlined />
-                                        </FlexBetween>
-                                    )}
-                                </Box>
-                                {image && (
-                                    <IconButton
-                                        onClick={() => setImage(null)}
-                                        sx={{ width: "8%" }}
-                                    >
-                                        <DeleteOutline />
-                                    </IconButton>
-                                )}
-                            </FlexBetween>
-                        )}
-                    </DropZone>
-                </Box>
             )}
-
-            <Divider sx={{ margin: "1.25rem" }} />
-
-            <FlexBetween>
-                <FlexBetween
-                    gap="0.25rem"
-                    onClick={() => setIsImage(!isImage)}>
-                    <ImageOutlined sx={{ color: mediumMain }} />
-                    <Typography
-                        color={mediumMain}
-                        sx={{
-                            "&:hover": {
-                                cursor: "pointer",
-                                color: medium
-                            }
-                        }}
-                    >
-                        Image
-                    </Typography>
-                </FlexBetween>
-                {isDesktopScreen ? (
-                    <>
-                        <FlexBetween gap="0.25rem">
-                            <GifBoxOutlined sx={{ color: mediumMain }} />
-                            <Typography color={mediumMain}>Clip</Typography>
-                        </FlexBetween>
-                        <FlexBetween gap="0.25rem">
-                            <AttachFileOutlined sx={{ color: mediumMain }} />
-                            <Typography color={mediumMain}>Attachment</Typography>
-                        </FlexBetween>
-                        <FlexBetween gap="0.25rem">
-                            <MicOutlined sx={{ color: mediumMain }} />
-                            <Typography color={mediumMain}>Audio</Typography>
-                        </FlexBetween>
-                    </>
-                ) : (
-                    <FlexBetween gap="0.25rem">
-                        <MoreHorizOutlined sx={{ color: mediumMain }} />
-                        <Typography color={mediumMain}>More</Typography>
+            <FlexBetween mt="0.25rem">
+                <FlexBetween gap="1rem">
+                    <FlexBetween gap="0.3rem">
+                        <IconButton onClick={patchLike}>
+                            {isLiked ? (
+                                <FavoriteOutlined sx={{ color: primary }} />
+                            ) : (
+                                <FavoriteBorderOutlined sx={{ color: primary }} />
+                            )}
+                        </IconButton>
+                        <Typography>{likeCount}</Typography>
                     </FlexBetween>
-                )}
-                <Button
-                    disabled={!post}
-                    onClick={handlePost}
-                    sx={{
-                        color: palette.primary.alt,
-                        backgroundColor: palette.primary.main,
-                        borderRadius: "3rem"
-                    }}
-                >
-                    Post
-                </Button>
+                    <FlexBetween gap="0.3rem">
+                        <IconButton onClick={() => setIsComments(!isComments)}>
+                            <ChatBubbleOutlineOutlined />
+                        </IconButton>
+                        <Typography>{comments.length}</Typography>
+                    </FlexBetween>
+                </FlexBetween>
+                <IconButton>
+                    <ShareOutlined />
+                </IconButton>
             </FlexBetween>
+            {isComments &&
+                <Box mt="0.5rem">
+                    {comments?.map((comment, i) => (
+                        <Box key={`${name}-${i}`}>
+                            <Divider />
+                            <Typography sx={{
+                                color: main,
+                                m: "0.5rem",
+                                pl: "1rem"
+                            }}>
+                                {comment}
+                            </Typography>
+                        </Box>
+                    ))}
+                    <Divider />
+                </Box>
+            }
         </WidgetWrapper>
     )
 }
