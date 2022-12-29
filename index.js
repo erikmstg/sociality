@@ -34,7 +34,7 @@ app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(morgan("common"));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
-app.use("/assets", express.static(path.join(__dirname, "public/access"))); // is going to set the directory where we keep our assets
+app.use("/assets", express.static(path.join(__dirname, "public/assets"))); // is going to set the directory where we keep our assets
 
 /* File storage configuration */
 const storage = multer.diskStorage({

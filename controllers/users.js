@@ -34,8 +34,8 @@ export const getUserFriends = async (req, res) => {
 export const addRemoveFriend = async (req, res) => {
   try {
     const { id, friendId } = req.params;
-    const user = User.findById(id);
-    const friend = User.findById(friendId);
+    const user = await User.findById(id);
+    const friend = await User.findById(friendId);
 
     // tenuos logic
     // if friendId is included in the main of user's friend
@@ -47,12 +47,12 @@ export const addRemoveFriend = async (req, res) => {
       friend.friends.push(id);
     }
     await user.save();
-    await user.save();
+    await friend.save();
 
     const friends = await Promise.all(
       user.friends.map((id) => User.findById(id))
     );
-    const formattedFriends = friends?.map(
+    const formattedFriends = friends.map(
       ({ _id, firstName, lastName, occupation, location, picturePath }) => {
         return { _id, firstName, lastName, occupation, location, picturePath };
       }
