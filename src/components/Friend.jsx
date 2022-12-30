@@ -21,6 +21,7 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
 
     // check them both are friend or not
     const isFriend = friends.find((friend) => friend._id === friendId);
+    const isSelf = Boolean(_id === friendId)
 
     const patchFriend = async () => {
         const response = await fetch(
@@ -65,7 +66,7 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
                     </Typography>
                 </Box>
             </FlexBetween>
-            <IconButton
+            {!isSelf && <IconButton
                 onClick={() => patchFriend()}
                 sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
             >
@@ -74,7 +75,7 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
                 ) : (
                     <PersonAddOutlined sx={{ color: primaryDark }} />
                 )}
-            </IconButton>
+            </IconButton>}
         </FlexBetween>
     );
 }
