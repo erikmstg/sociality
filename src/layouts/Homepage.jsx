@@ -4,6 +4,8 @@ import { useSelector } from "react-redux"
 import UserWidget from "./widgets/UserWidget"
 import MyPostWidget from "./widgets/MyPostWidget"
 import PostsTimeline from "./widgets/PostsTimeline"
+import AdvertWidget from "./widgets/AdvertWidget"
+import FriendlistWidget from "./widgets/FriendlistWidget"
 
 const Homepage = () => {
   const { _id, picturePath } = useSelector(state => state.user)
@@ -30,7 +32,11 @@ const Homepage = () => {
           <PostsTimeline userId={_id} />
         </Box>
         {isDesktopScreen && (
-          <Box flexBasis="26%"></Box>
+          <Box flexBasis="26%">
+            <AdvertWidget />
+            <Box m="2rem 0" />
+            <FriendlistWidget userId={_id} />
+          </Box>
         )}
       </Box>
     </Box>

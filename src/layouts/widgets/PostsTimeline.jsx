@@ -22,10 +22,9 @@ const PostsTimeline = ({ userId, isProfile = false }) => {
             method: "GET",
             headers: { Authorization: `Bearer ${token}` }
         })
-        const response = request.json()
+        const response = await request.json()
         dispatch(setPosts({ posts: response }))
     }
-
 
     useEffect(() => {
         if (isProfile) {

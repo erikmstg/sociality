@@ -20,7 +20,7 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
     const medium = palette.neutral.medium
 
     // check them both are friend or not
-    const isFriend = friends.find((friend) => friend._id === friendId);
+    const isFriend = friends.find((friend) => friend._id === friendId)
     const isSelf = Boolean(_id === friendId)
 
     const patchFriend = async () => {

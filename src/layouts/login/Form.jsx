@@ -9,7 +9,6 @@ import { setLogin } from "../../state"; // set their to login page
 import DropZone from "react-dropzone" // user can drop file or put img file
 import FlexBetween from "../../components/FlexBetween"
 
-
 /* yup validation schema */
 const registerSchema = yup.object().shape({
     // pass all values to all schema
@@ -42,7 +41,6 @@ const initValuesLogin = {
     password: ""
 }
 
-
 const Form = () => {
     const [pageType, setPageType] = useState("login")
     const { palette } = useTheme()
@@ -70,7 +68,6 @@ const Form = () => {
 
         if (responseSaveUser) {
             setPageType("login")
-            console.log(responseSaveUser)
         }
     }
 
@@ -91,7 +88,6 @@ const Form = () => {
                 })
             )
             navigate("/home")
-            console.log(responseUserData)
         }
     }
 
