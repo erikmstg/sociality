@@ -15,9 +15,9 @@ POST http://localhost:5000/auth/login
 Content-Type: application/json
 
 {
-    "email": "admindua@asd.asd",
+    "email": "erikmikael@example.com",
     "password": "1234"
 }
 
 ###
-GET http://localhost:5000/auth/
+GET http://localhost:5000/users/63af6d732232c58964b622be/friends
