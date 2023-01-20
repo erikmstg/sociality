@@ -39,7 +39,7 @@ const FriendlistWidget = ({ userId }) => {
             <Box display="flex" flexDirection="column" gap="1.5rem">
                 {friends.map((friend) => (
                     <Friend
-                        key={(friend._id).toString(0)}
+                        key={(friend._id).toString()}
                         friendId={friend._id}
                         name={`${friend.firstName} ${friend.lastName}`}
                         subtitle={friend.occupation}
